@@ -13,10 +13,13 @@ import { SignInResponseDto } from '../models/dtos/responses/sign-in-response-dto
 import { User } from '../models/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
-  constructor(private http: HttpClient, private errorMessageService: ErrorMessagingService) {}
+  constructor(
+    private http: HttpClient,
+    private errorMessageService: ErrorMessagingService
+  ) {}
 
   /**
    * Signs in
@@ -26,17 +29,14 @@ export class AccountService {
   signIn(signInRequestDto: SignInRequestDto): Observable<SignInResponseDto> {
     const webApiUrl = ApiConst.PATH_API_ROOT + ApiConst.PATH_SIGN_IN;
     const headers = new HttpHeaders({
-      authorization: 'Basic ' + btoa(signInRequestDto.Username + ':' + signInRequestDto.Password)
+      authorization:
+        'Basic ' +
+        btoa(signInRequestDto.Username + ':' + signInRequestDto.Password),
     });
 
     return this.http
       .post<SignInResponseDto>(webApiUrl, signInRequestDto, { headers })
-      .pipe(
-        catchError((error) => {
-          this.errorMessageService.setupPageErrorMessageFromResponse(error);
-          return of(null as SignInResponseDto);
-        })
-      );
+      .pipe();
   }
 
   /**
